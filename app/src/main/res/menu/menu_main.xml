@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="unicam.pi.mqespol.view.MainActivity">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/add_dispositivo"
+        android:orderInCategory="100"
+        android:title="@string/add_device"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/del_dispositivo"
+        android:orderInCategory="100"
+        android:title="@string/del_device"
+        app:showAsAction="never" />
+</menu>
