@@ -25,7 +25,7 @@ import unicam.pi.mqespol.view.MainActivity;
 
 /**
  * Esta clase Sirve para brindar funciones de la API Wifi Manager
- * Implementa ON/OFF HostPot Local,Scanear Redes Wifi y verificar Connectividad con Wifi.
+ * Implementa ON/OFF HostPot Local,Scanear Redes Wifi y verificar Connectividad con Wifi e IP.
  * */
 
 

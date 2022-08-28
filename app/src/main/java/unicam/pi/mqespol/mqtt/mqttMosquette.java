@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-
 import io.moquette.BrokerConstants;
 import io.moquette.broker.Server;
 import io.moquette.broker.config.MemoryConfig;
@@ -20,10 +19,6 @@ import unicam.pi.mqespol.model.LocalBroker;
 public class mqttMosquette {
 
     private static Server mqttBroker;
-    //    private List<InterceptHandler> handlers;
-    public static int clientesConectados(){
-        return   mqttBroker.listConnectedClients().size();
-    }
 
     public static void startMoquette(LocalBroker localBroker, MQTTServerListener listener) throws IOException {
         List<InterceptHandler> list = Collections.singletonList(listener);
@@ -33,10 +28,10 @@ public class mqttMosquette {
                 mqttBroker.startServer(getMemoryConfig(localBroker),list);
             }
             Thread.sleep(2000);
-//            MqttPublishMessage mensaje = MqttMessageBuilders.publish().topicName("/sensor").retained(true).qos(MqttQoS.AT_LEAST_ONCE)
-//                    .payload(Unpooled.copiedBuffer("Mensaje publico al servidor!".getBytes(StandardCharsets.UTF_8)))
-//                    .build();
-//            mqttBroker.internalPublish(mensaje,"RonaldoRodriguez");
+            MqttPublishMessage mensaje = MqttMessageBuilders.publish().topicName("/sensor").retained(true).qos(MqttQoS.AT_LEAST_ONCE)
+                    .payload(Unpooled.copiedBuffer("Mensaje publico al servidor!".getBytes(StandardCharsets.UTF_8)))
+                    .build();
+            mqttBroker.internalPublish(mensaje,"RonaldoRodriguez");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -54,7 +49,7 @@ public class mqttMosquette {
         try {
             if(mqttBroker!=null) mqttBroker.stopServer();
         } catch (Exception e) {
-            e.getMessage();
+            e.printStackTrace();
         }
     }
 }

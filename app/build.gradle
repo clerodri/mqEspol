@@ -55,4 +55,5 @@ dependencies {
     implementation ('io.moquette:moquette-broker:0.15') {
         exclude group: "org.slf4j", module: "slf4j-log4j12"
     }
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
 }

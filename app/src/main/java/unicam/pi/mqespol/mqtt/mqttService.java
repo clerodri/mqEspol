@@ -29,6 +29,7 @@ public class mqttService extends Service {
 
     final String CHANNELID = "Foreground Service ID";
     private Context context;
+    Boolean isDestroyed=false;
     private final IBinder mbinder= new LocalBinder();
     @Nullable
     @Override
@@ -49,9 +50,11 @@ public class mqttService extends Service {
                     @Override
                     public void run() {
                             Log.e("Service", "Service is running...");
-                            WifiInfo connectionInfo = MainActivity.wifiManager.getConnectionInfo();
+                            WifiManager wm = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+                            WifiInfo connectionInfo = wm.getConnectionInfo();
                             int ipAddress = connectionInfo.getIpAddress();
                             String ipString = Formatter.formatIpAddress(ipAddress);
+                        Log.e("TAG","IP WIFI MANAGER "+ ipString);
                             LocalBroker localBroker=new LocalBroker(ipString,1883,"roro");
                            Log.e("TAG","Local Broker Create");
                             MQTTServerListener mqttServerListener = new MQTTServerListener();
@@ -72,7 +75,7 @@ public class mqttService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.e("TAG","Server Stopped");
-        Boolean isDestroyed = true;
+        isDestroyed = true;
         Toast.makeText(context,"Stopping Service MQTT",Toast.LENGTH_SHORT).show();
         mqttMosquette.stopMoquette();
     }
@@ -88,17 +91,16 @@ public class mqttService extends Service {
 
     private Notification mostrarNotificacion(){
 
-        NotificationChannel channel = null;
-        channel = new NotificationChannel(
+
+        NotificationChannel channel = new NotificationChannel(
                 CHANNELID,
                 "Notificacion Broker",
                     NotificationManager.IMPORTANCE_DEFAULT
         );
         NotificationManager notificationManager=getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
-        Notification.Builder notification = null;
-        notification = new Notification.Builder(this, CHANNELID)
-                .setContentText("")
+        Notification.Builder notification = new Notification.Builder(this, CHANNELID)
+                .setContentText("Server MQTT running...")
                 .setContentTitle("Server MQTT running...")
                 .setOngoing(true)
                 .setTicker("MQTT")

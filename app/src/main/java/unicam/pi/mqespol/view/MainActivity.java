@@ -15,10 +15,11 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
 
 import unicam.pi.mqespol.R;
 
+import unicam.pi.mqespol.mqtt.MqttConnection;
 import unicam.pi.mqespol.mqtt.mqttService;
 import unicam.pi.mqespol.util.WifiFuctions;
 
@@ -29,8 +30,8 @@ import unicam.pi.mqespol.util.WifiFuctions;
  */
 public class MainActivity extends AppCompatActivity {
     public static WifiManager wifiManager;
-   // public static MqttAndroidClient mclient;
     ProgressBar progressBar;
+    Intent serviceMQTT;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,17 +41,19 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
         setSupportActionBar(toolbar);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        Log.i("TAG", "main activity CREATE");
-      //  mclient = ClientConnection.getClient(getApplicationContext()).getMqttClient();  //USO DE CLASE SINGLETON PARA QUE LA CONEXION SE HAGA UNA SOLA VEZ!
-      //  initApp();
+        initApp();
+        try {
+            MqttConnection.connect(getApplicationContext());
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+        Log.i("ACTIVTY", "main activity CREATE");
     }
 
-//    void initApp(){
-//       // WifiFuctions.createHostpot(MainActivity.this,wifiManager);
-//        Intent serviceMQTT  = new Intent(MainActivity.this, mqttService.class);
-//        startForegroundService(serviceMQTT);
-//    }
-
+    void initApp(){
+       serviceMQTT  = new Intent(MainActivity.this, mqttService.class);
+        this.startForegroundService(serviceMQTT);
+    }
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
@@ -72,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
                     WifiFuctions.setWifiOn();
                     Toast.makeText(getApplicationContext(), "Turnning On WiFi...Wait..", Toast.LENGTH_SHORT).show();
                 }
-                //wifiManager.setWifiEnabled(true); //Turnning ON Wifi
                 progressBar.setVisibility(View.VISIBLE);
                 Handler mhandler = new Handler();
                 mhandler.postDelayed(() -> {
@@ -93,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
                 return true;
             case R.id.fragment_showdevice:
-             //   wifiManager.setWifiEnabled(false);
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragmentContainer, FragmentListDevice.class,null,"fdevice")
                             .setReorderingAllowed(true)
@@ -104,4 +105,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        this.stopService(serviceMQTT);
+        super.onDestroy();
+    }
 }

@@ -10,43 +10,61 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import java.util.List;
 import unicam.pi.mqespol.databinding.FragmentListDeviceBinding;
 import unicam.pi.mqespol.model.Device;
 import unicam.pi.mqespol.util.WifiFuctions;
 import unicam.pi.mqespol.view.adapters.DeviceAdapter;
-import unicam.pi.mqespol.viewModel.ListDeviceViewModel;
+import unicam.pi.mqespol.viewModel.DeviceViewModel;
 
 
 public class FragmentListDevice extends Fragment {
 
-    private ListDeviceViewModel listDeviceViewModel;
+    private DeviceViewModel deviceViewModel;
     private FragmentListDeviceBinding binding;
     private DeviceAdapter deviceAdapter;
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        savedInstanceState = getArguments();
-        listDeviceViewModel = new ViewModelProvider(this).get(ListDeviceViewModel.class);
+        deviceViewModel = new ViewModelProvider(this).get(DeviceViewModel.class);
+        Log.d("TAG","LIST DEVICE FRAGMENT");
         if(!WifiFuctions.isHostPotOn){
             WifiFuctions.setWifiOff();
-            listDeviceViewModel.setHotspotOn(getActivity());  //ACTIVAR EL HOSTPOT OnHostPot Wifi
+            deviceViewModel.setHotspotOn(getActivity());  //ACTIVAR EL HOSTPOT OnHostPot Wifi
         }
 
-       // mqttConnection.mqttConnect(getContext());
-        listDeviceViewModel.getData(savedInstanceState);
-        listDeviceViewModel.getAllDevices().observe(getViewLifecycleOwner(), new Observer<List<Device>>() {
+
+        deviceViewModel.getAllDevices().observe(getViewLifecycleOwner(), new Observer<List<Device>>() {
             @Override
             public void onChanged(List<Device> devices) {
                 deviceAdapter.setDevices(devices);
             }
         });
+        deviceViewModel.getDevice().observe(getViewLifecycleOwner(), new Observer<Device>() {
+            @Override
+            public void onChanged(Device device) {
+                toast("Device AGREGADO!!!!");
+                deviceAdapter.setDevices(deviceViewModel.getAllDevices().getValue());
+
+            }
+        });
+//        deviceViewModel.getMensaje().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(String s) {
+//                if(s!=null){
+//                    Log.d("TAG","TOAST LOGEADO");
+//                     toast("Mensaje Recibido del Broker: "+s);
+//                }
+//            }
+//        });
 
         initRecyclerView();
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -57,7 +75,7 @@ public class FragmentListDevice extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                    listDeviceViewModel.delete(deviceAdapter.getDeviceAt(viewHolder.getAdapterPosition()));
+                    deviceViewModel.delete(deviceAdapter.getDeviceAt(viewHolder.getAdapterPosition()));
                     toast("Device Deleted");
             }
         }).attachToRecyclerView(binding.recyclerView);
