@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "unicam.pi.mqespol"
-        minSdk 26
+        minSdk 30
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -34,6 +34,8 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.navigation:navigation-fragment:2.5.1'
+    implementation 'androidx.navigation:navigation-ui:2.5.1'
     def lifecycle_version = "2.6.0-alpha01"
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
@@ -48,10 +50,10 @@ dependencies {
     implementation "androidx.room:room-runtime:2.4.3"
     annotationProcessor "androidx.room:room-compiler:2.4.3"
     implementation "androidx.cardview:cardview:1.0.0"
-    implementation ('org.eclipse.paho:org.eclipse.paho.android.service:1.0.2') {
+    implementation ('org.eclipse.paho:org.eclipse.paho.android.service:1.1.1') {
         exclude module: 'support-v4'
     }
-    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.1'
     implementation ('io.moquette:moquette-broker:0.15') {
         exclude group: "org.slf4j", module: "slf4j-log4j12"
     }

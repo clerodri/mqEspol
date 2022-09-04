@@ -2,6 +2,7 @@ package unicam.pi.mqespol.model;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -77,6 +78,7 @@ public class DeviceRepository {
         }
         @Override
         protected Void doInBackground(Device... devices) {
+            Log.d("VIEWMODEL", "REPOSITY UPDAATYING.: ");
             deviceDao.update(devices[0]);
             return null;
         }

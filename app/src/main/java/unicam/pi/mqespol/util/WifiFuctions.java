@@ -12,10 +12,13 @@ import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Handler;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -35,18 +38,7 @@ public class WifiFuctions extends Application {
     public static Boolean isHostPotOn=false;
     public static Boolean isWifiOn=false;
 
-    public static List<ScanResult> getListNetworks(WifiManager wifiManager,FragmentActivity fragmentActivity){
-        if (ActivityCompat.checkSelfPermission(fragmentActivity.getApplicationContext(), Manifest.permission.CHANGE_WIFI_STATE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(fragmentActivity, new String[]{Manifest.permission.CHANGE_WIFI_STATE}, 0);
-        }
-        WifiReceiever wifiReceiver = new WifiReceiever();
-        fragmentActivity.registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-        if (ContextCompat.checkSelfPermission(fragmentActivity.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(fragmentActivity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
-        }
-        wifiManager.startScan();
-        return wifiManager.getScanResults();
-    }
+
 
 
     public static void createHostpot(FragmentActivity activity, WifiManager wifiManager){
@@ -57,6 +49,7 @@ public class WifiFuctions extends Application {
         wifiManager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
             @Override
             public void onStarted(WifiManager.LocalOnlyHotspotReservation reservation) {
+
                 super.onStarted(reservation);
                 myreservation =reservation;
                 Log.i("TAG", "ssid is:" + reservation.getWifiConfiguration().SSID);
@@ -91,14 +84,7 @@ public class WifiFuctions extends Application {
             Log.i("TAG", "setHostPotoff");
         }
     }
-    public static void setWifiOff(){
-        isWifiOn=false;
-        MainActivity.wifiManager.setWifiEnabled(false);
-    }
-    public static void setWifiOn(){
-        isWifiOn=true;
-        MainActivity.wifiManager.setWifiEnabled(true);
-    }
+
 
     public static String getIp(WifiManager wifiManager){
         WifiInfo connectionInfo = wifiManager.getConnectionInfo();
@@ -106,22 +92,6 @@ public class WifiFuctions extends Application {
         return Formatter.formatIpAddress(ipAddress);
     }
 
-    public static boolean isConnected(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager)
-                context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = null;
-        if (connectivityManager != null) {
-            networkInfo = connectivityManager.getActiveNetworkInfo();
-        }
-        return networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED;
+
     }
 
-
-
-
-    static class  WifiReceiever extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-        }
-    }
-}
