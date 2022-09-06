@@ -45,9 +45,9 @@ public abstract  class DeviceDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-//            deviceDao.insert(new Device("ESP32","TEMPERATURA","40"));
-//            deviceDao.insert(new Device("ESP31","GAS","44"));
-//            deviceDao.insert(new Device("ESP30","HUMEDAD","48"));
+            deviceDao.insert(new Device("ESP32","TEMPERATURA","40"));
+            deviceDao.insert(new Device("ESP31","GAS","44"));
+            deviceDao.insert(new Device("ESP30","HUMEDAD","48"));
             return null;
         }
     }

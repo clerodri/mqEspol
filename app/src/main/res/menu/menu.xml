@@ -3,13 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/fragmentAddDevice"
+        android:id="@+id/fragment_addDevice"
         android:title="@string/addDevices" />
-
+    <item
+        android:id="@+id/fragment_deleteDevice"
+        android:title="Fragmento2" />
     <item
         android:id="@+id/fragment_showSensor"
         android:title="@string/showSensors" />
     <item
-        android:id="@+id/fragmentListDevice"
+        android:id="@+id/fragment_showdevice"
         android:title="@string/showDevices" />
 </menu>
