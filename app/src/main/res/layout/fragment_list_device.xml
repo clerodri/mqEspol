@@ -9,77 +9,22 @@
     <TextView
         android:id="@+id/txt_list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:text="@string/listDevices"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/guideLineTop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view"
         />
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideLineTop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1"/>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideLineBot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.8"/>
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideLineMid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5"/>
-
-
-    <Button
-        android:id="@+id/btn_con"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/custom_bottom"
-        android:text="CONNECT"
-        android:textColor="#030404"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="15dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideLineMid"
-        app:layout_constraintTop_toTopOf="@+id/guideLineBot"
-        />
-    <Button
-        android:id="@+id/btn_pub"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/custom_bottom"
-        android:text="PUBLISH"
-        android:textColor="#030404"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toStartOf="@+id/guideLineMid"
-        app:layout_constraintTop_toTopOf="@+id/guideLineBot"
-
-        />
-
-    <EditText
-        android:id="@+id/valor_pub"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Valor"
-        app:layout_constraintBottom_toTopOf="@+id/guideLineTop"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="20dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        tools:listitem="@layout/device_item"
-        app:layout_constraintTop_toBottomOf="@+id/guideLineTop"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/guideLineBot"/>
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/device_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>
