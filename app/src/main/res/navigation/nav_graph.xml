@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragmentListDevice">
+
+    <fragment
+        android:id="@+id/fragmentListDevice"
+        android:name="unicam.pi.mqespol.view.FragmentListDevice"
+        android:label="Home"
+        tools:layout="@layout/fragment_list_device">
+        <action
+            android:id="@+id/action_fragmentListDevice_to_fragmentAddDevice"
+            app:destination="@id/fragmentAddDevice"
+            app:popUpTo="@id/fragmentAddDevice"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentAddDevice"
+        android:name="unicam.pi.mqespol.view.FragmentAddDevice"
+        android:label="Add Device"
+        tools:layout="@layout/fragment_add_device">
+
+        <action
+            android:id="@+id/action_fragmentAddDevice_to_fragmentListDevice"
+            app:destination="@id/fragmentListDevice" />
+    </fragment>
+
+
+</navigation>

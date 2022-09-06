@@ -1,14 +1,14 @@
 package unicam.pi.mqespol.view;
 
 
-import android.annotation.SuppressLint;
-import android.content.ComponentName;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +39,7 @@ import java.util.Objects;
 import unicam.pi.mqespol.databinding.FragmentListDeviceBinding;
 import unicam.pi.mqespol.model.Device;
 import unicam.pi.mqespol.util.Util;
+import unicam.pi.mqespol.util.WifiFuctions;
 import unicam.pi.mqespol.view.adapters.DeviceAdapter;
 import unicam.pi.mqespol.viewModel.DeviceViewModel;
 import unicam.pi.mqespol.viewModel.ServiceViewModel;
@@ -52,13 +53,26 @@ public class FragmentListDevice extends Fragment {
     private DeviceAdapter deviceAdapter;
     MqttAndroidClient mqttAndroidClient;
     private ServiceViewModel mServiceViewModel;
+    public static final String TAG="PEPA";
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "FRAGMENT ON CREATE");
+        mqttAndroidClient = new MqttAndroidClient(getContext(), Util.TCP + Util.getBrokerURL(requireContext()) + ":1883", Util.CLIENT_ID);
+        try {
+            mqttAndroidClient.connect();
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+        Log.e(TAG, "IP INIT SOURCE CLIENTE: "+Util.getBrokerURL(requireContext()));
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentListDeviceBinding.inflate(getLayoutInflater());
-        Log.d("PEPA", "FRAGMENT ON CREATE VIEW");
+        Log.d(TAG, "FRAGMENT ON CREATE VIEW");
         return binding.getRoot();
 
     }
@@ -68,15 +82,9 @@ public class FragmentListDevice extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initResources();
-        Log.d("PEPA", "FRAGMENT ON VIEW CREATED");
-        Log.d("TAG", "INTERNET ON: " + MainActivity.wifiManager.isWifiEnabled());
-        //
-//        if (!WifiFuctions.isHostPotOn) {
-//            //     MainActivity.wifiManager.setWifiEnabled(false);
-//            deviceViewModel.setHotspotOn(getActivity());  //ACTIVAR EL HOSTPOT OnHostPot Wifi
-//        }
-
-
+      //  validateHosPot();
+        Log.d(TAG, "FRAGMENT ON VIEW CREATED");
+        Log.d(TAG, "INTERNET ON: " + MainActivity.wifiManager.isWifiEnabled());
 
         binding.btnCon.setOnClickListener(v -> {
             if(mServiceViewModel.getBinder()!=null) {
@@ -121,10 +129,10 @@ public class FragmentListDevice extends Fragment {
         deviceViewModel = new ViewModelProvider(requireActivity()).get(DeviceViewModel.class);
         mServiceViewModel = new ViewModelProvider(this).get(ServiceViewModel.class);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerView.setHasFixedSize(true);
+       // binding.recyclerView.setHasFixedSize(true);
         deviceAdapter = new DeviceAdapter();
         binding.recyclerView.setAdapter(deviceAdapter);
-        MainActivity.wifiManager = (WifiManager) requireActivity().getSystemService(Context.WIFI_SERVICE);
+
     }
 
 
@@ -211,28 +219,24 @@ public class FragmentListDevice extends Fragment {
 
     @Override
     public void onStart() {
-        Log.d("PEPA", "FRAGMENT ON START");
         super.onStart();
     }
-
+//    public void validateHosPot(){
+//        if(!MainActivity.isHosPotOn){
+//            final Activity activity = FragmentListDevice.this.getActivity();
+//            if (activity instanceof MainActivity) {
+//                Log.d("PEPA", "ENTRO IF VALIDATE HOSTPOT LISTS DEVICE");
+//              //  ((MainActivity) activity).turnOnHotspot();
+//            }
+//        }
+//    }
     @Override
     public void onResume() {
-        Log.d("PEPA", "FRAGMENT ON RESUMEN");
+        Log.d(TAG, "FRAGMENT ON RESUMEN");
         super.onResume();
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d("PEPA", "FRAGMENT ON CREATE");
-        mqttAndroidClient = new MqttAndroidClient(getContext(), Util.TCP + Util.getBrokerURL(requireContext()) + ":1883", Util.CLIENT_ID);
-        try {
-            mqttAndroidClient.connect();
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
-        Log.e("TAG", "IP INIT SOURCE CLIENTE: "+Util.getBrokerURL(requireContext()));
-        super.onCreate(savedInstanceState);
-    }
+
 //
 //    @Override
 //    public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -240,28 +244,35 @@ public class FragmentListDevice extends Fragment {
 //        super.onSaveInstanceState(outState);
 //    }
 
+
     @Override
     public void onPause() {
-        Log.d("PEPA", "FRAGMENT ON PAUSE");
+        Log.d(TAG, "FRAGMENT ON PAUSE");
         super.onPause();
     }
 
     @Override
     public void onStop() {
-        Log.d("PEPA", "FRAGMENT ON STOP");
+//        Log.d(TAG, "FRAGMENT ON STOP");
+//        final Activity activity = FragmentListDevice.this.getActivity();
+//        if (activity instanceof MainActivity) {
+//            Log.d("PEPA", "ENTRO IF VALIDATE HOSTPOT LISTS DEVICE");
+//          //  ((MainActivity) activity).turnOffHotspot();
+//     //       MainActivity.isHosPotOn=false;
+//        }
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
-        Log.d("PEPA", "FRAGMENT ON DESTROY");
+        Log.d(TAG, "FRAGMENT ON DESTROY");
         super.onDestroy();
 
     }
 
     @Override
     public void onDestroyView() {
-        Log.d("PEPA", "FRAGMENT ON DESTROY VIEW");
+        Log.d(TAG, "FRAGMENT ON DESTROY VIEW");
         super.onDestroyView();
     }
 }

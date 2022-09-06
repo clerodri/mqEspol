@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/fragmentAddDevice"
+        android:title="@string/addDevices" />
+
+    <item
+        android:id="@+id/fragment_showSensor"
+        android:title="@string/showSensors" />
+    <item
+        android:id="@+id/fragmentListDevice"
+        android:title="@string/showDevices" />
+    <item
+        android:id="@+id/fragmentInformation"
+        android:title="@string/informationBroker" />
+</menu>

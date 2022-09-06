@@ -1,7 +1,10 @@
 package unicam.pi.mqespol.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,13 +47,22 @@ public class FragmentAddDevice extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Log.d("PEPA","FRAGMENT 2 ON VIEW CREATED");
         super.onViewCreated(view, savedInstanceState);
+        if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.Q && !MainActivity.wifiManager.isWifiEnabled())
+        {
+            MainActivity.wifiManager.setWifiEnabled(true);
+            Log.d("PEPA","ENTRO  CREATE IF");
+        }
         initRecyclerView();
-        deviceViewModel.setHostPotOff();
+
         binding.btnWifi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
-                startActivity(panelIntent);
+                if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
+                    startActivity(panelIntent);
+                }else{
+                    toast("API IS TOO LOW TO USE THIS BOTTOM");
+                }
             }
         });
 
@@ -122,6 +134,11 @@ public class FragmentAddDevice extends Fragment {
     @Override
     public void onStop() {
         Log.d("PEPA","FRAGMENT2 ON STOP");
+        if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.Q)
+        {
+            MainActivity.wifiManager.setWifiEnabled(false);
+            Log.d("PEPA","ENTRO  CREATE IF");
+        }
         super.onStop();
     }
 
@@ -140,6 +157,7 @@ public class FragmentAddDevice extends Fragment {
     @Override
     public void onDestroyView() {
         Log.d("PEPA","FRAGMENT2 ON DESTROY VIEW");
+
         super.onDestroyView();
     }
 }

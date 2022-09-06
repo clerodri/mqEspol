@@ -122,13 +122,13 @@ public class DeviceViewModel extends AndroidViewModel  {
         return listMutableLiveData;
     }
 
-    public void setHotspotOn(FragmentActivity fragmentActivity) {
-        WifiFuctions.createHostpot(fragmentActivity, MainActivity.wifiManager);
-    }
-
-    public void setHostPotOff() {
-        WifiFuctions.setHostPotOff(getApplication().getApplicationContext());
-    }
+//    public void setHotspotOn(FragmentActivity fragmentActivity) {
+//        WifiFuctions.createHostpot(fragmentActivity, MainActivity.wifiManager);
+//    }
+//
+//    public void setHostPotOff() {
+//        WifiFuctions.setHostPotOff(getApplication().getApplicationContext());
+//    }
     public void sendData(){
 
     }

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.format.Formatter;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LifecycleObserver;
 
 import java.io.File;
@@ -61,6 +63,7 @@ public class MqttAppService extends Service  {
         Log.e("Service","ON UNBIND");
         return super.onUnbind(intent);
     }
+
 
     public void initService(){
         int NOTIFICATION_ID = 1;
@@ -125,19 +128,19 @@ public class MqttAppService extends Service  {
         isServiceUp=false;
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
 
-
     }
 
 
-    private Notification mostrarNotificacion(PendingIntent pendingIntent){
 
-
-        NotificationChannel channel = new NotificationChannel(
-                CHANNELID,
-                "Notificacion Broker",
+    private Notification mostrarNotificacion(PendingIntent pendingIntent) {
+        NotificationChannel channel = null;
+            channel = new NotificationChannel(
+                    CHANNELID,
+                    "Notificacion Broker",
                     NotificationManager.IMPORTANCE_DEFAULT
-        );
-        NotificationManager notificationManager=getSystemService(NotificationManager.class);
+            );
+
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
         Notification.Builder notification = new Notification.Builder(this, CHANNELID)
                 .setContentText("Server MQTT running...")
@@ -147,6 +150,7 @@ public class MqttAppService extends Service  {
                 .setOnlyAlertOnce(true)
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.custom_bottom);
+
         return notification.build();
     }
 }
